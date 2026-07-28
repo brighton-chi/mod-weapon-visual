@@ -36,6 +36,8 @@ VisualData vData[] =
 {
     { 1, VIS_GOSSIP_MAIN_MENU_ACTION, GOSSIP_ICON_TALK, 0, "Back.." },
     { 1, 2, GOSSIP_ICON_INTERACT_1, 0, "Next.." },
+    { 1, 0, GOSSIP_ICON_INTERACT_1, 0, "No Visual" },
+    { 1, 0, GOSSIP_ICON_INTERACT_1, UINT32_MAX, "Remove Custom Visual" },
     { 1, 0, GOSSIP_ICON_BATTLE, 3789, "Berserking" },
     { 1, 0, GOSSIP_ICON_BATTLE, 3854, "Spell Power" },
     { 1, 0, GOSSIP_ICON_BATTLE, 3273, "Deathfrost" },
@@ -53,6 +55,8 @@ VisualData vData[] =
     { 2, VIS_GOSSIP_MAIN_MENU_ACTION, GOSSIP_ICON_TALK, 0, "Back.." },
     { 2, 3, GOSSIP_ICON_INTERACT_1, 0, "Next.." },
     { 2, 1, GOSSIP_ICON_INTERACT_1, 0, "Previous.." },
+    { 2, 0, GOSSIP_ICON_INTERACT_1, 0, "No Visual" },
+    { 2, 0, GOSSIP_ICON_INTERACT_1, UINT32_MAX, "Remove Custom Visual" },
     { 2, 0, GOSSIP_ICON_BATTLE, 425, "Black Temple Dummy" },
     { 2, 0, GOSSIP_ICON_BATTLE, 3855, "Spell Power III" },
     { 2, 0, GOSSIP_ICON_BATTLE, 1894, "Icy Weapon" },
@@ -69,6 +73,8 @@ VisualData vData[] =
 
     { 3, VIS_GOSSIP_MAIN_MENU_ACTION, GOSSIP_ICON_TALK, 0, "Back.." },
     { 3, 2, GOSSIP_ICON_INTERACT_1, 0, "Previous.." },
+    { 3, 0, GOSSIP_ICON_INTERACT_1, 0, "No Visual" },
+    { 3, 0, GOSSIP_ICON_INTERACT_1, UINT32_MAX, "Remove Custom Visual" },
     { 3, 0, GOSSIP_ICON_BATTLE, 3265, "Blessed Weapon Coating" },
     { 3, 0, GOSSIP_ICON_BATTLE, 2, "Frostbrand I" },
     { 3, 0, GOSSIP_ICON_BATTLE, 3, "Flametongue III" },
@@ -116,8 +122,17 @@ public:
             itemTemplate->SubClass == ITEM_SUBCLASS_WEAPON_FISHING_POLE)
             return;
 
-        player->SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (item->GetSlot() * 2), 0, visual_id);
-        CharacterDatabase.Execute("REPLACE into `mod_weapon_visual_effect` (`item_guid`, `enchant_visual_id`) VALUES ('{}', '{}')", item->GetGUID().GetCounter(), visual_id);
+        if (visual_id == UINT32_MAX)
+        {
+            player->SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (item->GetSlot() * 2), 0, 0);
+            CharacterDatabase.Execute("DELETE FROM `mod_weapon_visual_effect` WHERE `item_guid` = '{}'", item->GetGUID().GetCounter());
+            ChatHandler(player->GetSession()).PSendSysMessage("Custom visual removed. The weapon will show its real enchant.");
+        }
+        else
+        {
+            player->SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (item->GetSlot() * 2), 0, visual_id);
+            CharacterDatabase.Execute("REPLACE into `mod_weapon_visual_effect` (`item_guid`, `enchant_visual_id`) VALUES ('{}', '{}')", item->GetGUID().GetCounter(), visual_id);
+        }
     }
 
     void GetMenu(Player* player, Creature* creature, uint32 menuId)
