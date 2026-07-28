@@ -10,7 +10,7 @@
 #include "Chat.h"
 #include "ScriptedGossip.h"
 #include "Config.h"
-#include "Chat.h"
+#include "DBCStores.h"
 
 using namespace std;
 
@@ -39,54 +39,52 @@ VisualData vData[] =
     { 1, 0, GOSSIP_ICON_INTERACT_1, 0, "No Visual" },
     { 1, 0, GOSSIP_ICON_INTERACT_1, UINT32_MAX, "Remove Custom Visual" },
     { 1, 0, GOSSIP_ICON_BATTLE, 3789, "Berserking" },
-    { 1, 0, GOSSIP_ICON_BATTLE, 3854, "Spell Power" },
+    { 1, 0, GOSSIP_ICON_BATTLE, 3854, "+81 Spell Power" },
     { 1, 0, GOSSIP_ICON_BATTLE, 3273, "Deathfrost" },
     { 1, 0, GOSSIP_ICON_BATTLE, 3225, "Executioner" },
     { 1, 0, GOSSIP_ICON_BATTLE, 3870, "Blood Draining" },
-    { 1, 0, GOSSIP_ICON_BATTLE, 1899, "Unholy Weapon" },
+    { 1, 0, GOSSIP_ICON_BATTLE, 1899, "Unholy Weapon/Black Magic" },
     { 1, 0, GOSSIP_ICON_BATTLE, 2674, "Spellsurge" },
-    { 1, 0, GOSSIP_ICON_BATTLE, 2675, "Battlemaster" },
-    { 1, 0, GOSSIP_ICON_BATTLE, 2671, "Arcane and Fire Spell Power" },
-    { 1, 0, GOSSIP_ICON_BATTLE, 2672, "Shadow and Frost Spell Power" },
-    { 1, 0, GOSSIP_ICON_BATTLE, 3365, "Rune of Swordshattering" },
+    { 1, 0, GOSSIP_ICON_BATTLE, 2675, "Battlemaster/+40 Spell Power" },
+    { 1, 0, GOSSIP_ICON_BATTLE, 2671, "Sunfire" },
+    { 1, 0, GOSSIP_ICON_BATTLE, 2672, "Soulfrost" },
+    { 1, 0, GOSSIP_ICON_BATTLE, 2667, "Savagery" },
     { 1, 0, GOSSIP_ICON_BATTLE, 2673, "Mongoose" },
-    { 1, 0, GOSSIP_ICON_BATTLE, 2343, "Spell Power" },
+    { 1, 0, GOSSIP_ICON_BATTLE, 2343, "+43 Spell Power" },
 
     { 2, VIS_GOSSIP_MAIN_MENU_ACTION, GOSSIP_ICON_TALK, 0, "Back.." },
     { 2, 3, GOSSIP_ICON_INTERACT_1, 0, "Next.." },
     { 2, 1, GOSSIP_ICON_INTERACT_1, 0, "Previous.." },
-    { 2, 0, GOSSIP_ICON_INTERACT_1, 0, "No Visual" },
-    { 2, 0, GOSSIP_ICON_INTERACT_1, UINT32_MAX, "Remove Custom Visual" },
     { 2, 0, GOSSIP_ICON_BATTLE, 425, "Black Temple Dummy" },
-    { 2, 0, GOSSIP_ICON_BATTLE, 3855, "Spell Power III" },
+    { 2, 0, GOSSIP_ICON_BATTLE, 3855, "+69 Spell Power" },
     { 2, 0, GOSSIP_ICON_BATTLE, 1894, "Icy Weapon" },
     { 2, 0, GOSSIP_ICON_BATTLE, 1103, "Agility" },
     { 2, 0, GOSSIP_ICON_BATTLE, 1898, "Lifestealing" },
-    { 2, 0, GOSSIP_ICON_BATTLE, 3345, "Earthliving I" },
+    { 2, 0, GOSSIP_ICON_BATTLE, 3345, "Earthliving" },
     { 2, 0, GOSSIP_ICON_BATTLE, 1743, "MHTest02" },
-    { 2, 0, GOSSIP_ICON_BATTLE, 3093, "Attack Power vs Undead and Demons" },
+    { 2, 0, GOSSIP_ICON_BATTLE, 3093, "Scourgebane" },
     { 2, 0, GOSSIP_ICON_BATTLE, 1900, "Crusader" },
-    { 2, 0, GOSSIP_ICON_BATTLE, 3846, "Spell Power II" },
-    { 2, 0, GOSSIP_ICON_BATTLE, 1606, "Attack Power" },
-    { 2, 0, GOSSIP_ICON_BATTLE, 283, "Windfury I" },
-    { 2, 0, GOSSIP_ICON_BATTLE, 1, "Rockbiter III" },
+    { 2, 0, GOSSIP_ICON_BATTLE, 3846, "+40 Spell Power" },
+    { 2, 0, GOSSIP_ICON_BATTLE, 1606, "+50/+85 Attack Power" },
+    { 2, 0, GOSSIP_ICON_BATTLE, 283, "Windfury" },
+    { 2, 0, GOSSIP_ICON_BATTLE, 1, "Rockbiter" },
 
     { 3, VIS_GOSSIP_MAIN_MENU_ACTION, GOSSIP_ICON_TALK, 0, "Back.." },
     { 3, 2, GOSSIP_ICON_INTERACT_1, 0, "Previous.." },
-    { 3, 0, GOSSIP_ICON_INTERACT_1, 0, "No Visual" },
-    { 3, 0, GOSSIP_ICON_INTERACT_1, UINT32_MAX, "Remove Custom Visual" },
     { 3, 0, GOSSIP_ICON_BATTLE, 3265, "Blessed Weapon Coating" },
-    { 3, 0, GOSSIP_ICON_BATTLE, 2, "Frostbrand I" },
-    { 3, 0, GOSSIP_ICON_BATTLE, 3, "Flametongue III" },
-    { 3, 0, GOSSIP_ICON_BATTLE, 3266, "Righteous Weapon Coating" },
-    { 3, 0, GOSSIP_ICON_BATTLE, 1903, "Spirit" },
+    { 3, 0, GOSSIP_ICON_BATTLE, 2, "Frostbrand" },
+    { 3, 0, GOSSIP_ICON_BATTLE, 3, "Flametongue" },
+    { 3, 0, GOSSIP_ICON_BATTLE, 3266, "Beastslaying/Righteous" },
+    { 3, 0, GOSSIP_ICON_BATTLE, 1903, "+20 Spirit" },
     { 3, 0, GOSSIP_ICON_BATTLE, 13, "Sharpened" },
     { 3, 0, GOSSIP_ICON_BATTLE, 26, "Frost Oil" },
-    { 3, 0, GOSSIP_ICON_BATTLE, 7, "Deadly Poison" },
-    { 3, 0, GOSSIP_ICON_BATTLE, 803, "Fiery Weapon" },
-    { 3, 0, GOSSIP_ICON_BATTLE, 1896, "Weapon Damage" },
-    { 3, 0, GOSSIP_ICON_BATTLE, 2666, "Intellect" },
+    { 3, 0, GOSSIP_ICON_BATTLE, 7, "Poison" },
+    { 3, 0, GOSSIP_ICON_BATTLE, 803, "Fiery Weapon/Demonslaying" },
+    { 3, 0, GOSSIP_ICON_BATTLE, 1896, "+9 Weapon Damage" },
+    { 3, 0, GOSSIP_ICON_BATTLE, 2666, "+30 Intellect" },
     { 3, 0, GOSSIP_ICON_BATTLE, 25, "Shadow Oil" },
+    { 3, 0, GOSSIP_ICON_BATTLE, 3869, "Blade Ward" },
+    { 3, 0, GOSSIP_ICON_BATTLE, 3364, "Empower Rune Weapon" },
 };
 
 class VisualWeaponNPC : public CreatureScript
@@ -124,9 +122,16 @@ public:
 
         if (visual_id == UINT32_MAX)
         {
-            player->SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (item->GetSlot() * 2), 0, 0);
             CharacterDatabase.Execute("DELETE FROM `mod_weapon_visual_effect` WHERE `item_guid` = '{}'", item->GetGUID().GetCounter());
-            ChatHandler(player->GetSession()).PSendSysMessage("Custom visual removed. The weapon will show its real enchant.");
+
+            uint32 realVisual = 0;
+            if (uint32 const enchantId = item->GetEnchantmentId(PERM_ENCHANTMENT_SLOT))
+            {
+                if (SpellItemEnchantmentEntry const* enchantEntry = sSpellItemEnchantmentStore.LookupEntry(enchantId))
+                    realVisual = enchantEntry->aura_id;
+            }
+            player->SetUInt16Value(PLAYER_VISIBLE_ITEM_1_ENCHANTMENT + (item->GetSlot() * 2), 0, realVisual);
+            ChatHandler(player->GetSession()).PSendSysMessage("Custom visual removed. The weapon will display its real enchant.");
         }
         else
         {
